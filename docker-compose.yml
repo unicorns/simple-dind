@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  dev:
+    image: docker/compose:alpine-1.29.2
+    entrypoint: tail -f /dev/null
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_TLS_VERIFY=1
+    volumes:
+      - certs-client:/root/.docker:ro
+  docker:
+    image: docker:20.10.8-dind
+    privileged: true
+    environment:
+      - DOCKER_TLS_CERTDIR=/certs
+    volumes:
+      - certs-ca:/certs/ca
+      - certs-client:/certs/client
+volumes:
+    certs-ca:
+    certs-client:
+
